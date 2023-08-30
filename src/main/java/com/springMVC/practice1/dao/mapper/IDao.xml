@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.springMVC.practice1.dao.IDao">
+    <select id="listDao" resultType="com.springMVC.practice1.dto.ContentDto">
+        SELECT * FROM BOARD ORDER BY MID DESC
+    </select>
+
+    <!--  #{} == 데이터 타입을 int or String에 따라 맞춰 줌 <=> ${} == 데이터 타입을 맞춰 주지 않음  -->
+    <insert id="writeDao">
+        insert into board (mWriter, mContent) values (#{param1},#{param2})
+    </insert>
+
+
+    <delete id="deleteDao">
+        delete from board where mId=#{param1}
+    </delete>
+</mapper>

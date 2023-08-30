@@ -1,7 +1,9 @@
 package com.springMVC.practice1.controller;
 
 import com.springMVC.practice1.dao.ContentDao;
+import com.springMVC.practice1.dao.IDao;
 import com.springMVC.practice1.dto.ContentDto;
+import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +21,14 @@ import java.util.Locale;
 public class HomeController {
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
-    ContentDao dao;
     @Autowired
-    public void setDao(ContentDao dao) {
-        this.dao = dao;
-    }
+    private SqlSession sqlSession;
+
+    //    ContentDao dao;
+//    @Autowired
+//    public void setDao(ContentDao dao) {
+//        this.dao = dao;
+//    }
 
     @RequestMapping("/")
     public String home(Locale locale, Model model){
@@ -41,9 +46,10 @@ public class HomeController {
 
     @RequestMapping("/list")
     public String list(Model model){
-        ArrayList<ContentDto> dtos = dao.listDao();
-        model.addAttribute("list", dtos);
-
+//        ArrayList<ContentDto> dtos = dao.listDao();
+//        model.addAttribute("list", dtos);
+        IDao dao = sqlSession.getMapper(IDao.class);
+        model.addAttribute("list", dao.listDao());
         return "/list";
     }
 
@@ -54,6 +60,8 @@ public class HomeController {
 
     @RequestMapping("/write")
     public String write(HttpServletRequest request, Model model){
+        //dao.writeDao(request.getParameter("mWriter"), request.getParameter("mContent"));
+        IDao dao = sqlSession.getMapper(IDao.class);
         dao.writeDao(request.getParameter("mWriter"), request.getParameter("mContent"));
         return "redirect:list";
     }
@@ -65,6 +73,8 @@ public class HomeController {
 
     @RequestMapping("/delete")
     public String delete(HttpServletRequest request, Model model){
+        //dao.deleteDao(request.getParameter("mId"));
+        IDao dao = sqlSession.getMapper(IDao.class);
         dao.deleteDao(request.getParameter("mId"));
         return "redirect:list";
     }
